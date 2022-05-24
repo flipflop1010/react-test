@@ -1,23 +1,26 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Child from './components/child_parent/Child';
+import Parent from './components/child_parent/Parent';
+import DropdownChecked from './components/Dropdown/DropdownChecked';
+import DropdownDataFlow from './components/Dropdown/DropdownDataFlow';
 
 function App() {
+
+  const handleParent=(event)=>{
+    // console.log('handleParent',event);
+    console.log('rakesh bhunia');
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <Parent>
+        <Child handleParent={handleParent}/>
+      </Parent> */}
+
+      {/* <DropdownDataFlow/> */}
+      <DropdownChecked/>
     </div>
   );
 }
