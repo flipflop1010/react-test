@@ -17,40 +17,64 @@ const DeliveryFormValidationWithFormik = () => {
 
     const initialFormValues = {
         pickup_date: moment().format('YYYY-MM-DD'),
-        dropoff_date: moment().add(1, 'day').format('YYYY-MM-DD'),
+        // dropoff_date: moment().add(1,'days').format('YYYY-MM-DD'),
+        dropoff_date: '2022-05-31',
         pickup_time: '',
         dropoff_time: '',
     }
     const formValidationSchema = Yup.object().shape({
         pickup_date: Yup.date().required("field is required").min(moment().toDate().toDateString(), "past date not be submitted"),
         dropoff_date: Yup.date().required("field is required").min(moment().toDate().toDateString(), "this date not be submitted"),
-        pickup_time: Yup.string().required("time required"),
-        dropoff_time: Yup.string().required("time required")
-            .test("dtime", "time should not before pickuptime", (value) => {
-                let pd = moment(Yup.ref('pickup_date'))
-                let dd = moment(Yup.ref('dropoff_date'))
-                let pt = moment(Yup.ref('pickup_time'),"HH:mm")
-                let dt = moment(value,"HH:mm")
-                console.log('pd',pd.isSame(dd));
-                console.log('pd',dt);
-                // if (pd.isSame(dd)) {
-                //     console.log('inside');
-                //     return false
-                //     // return (dt.isAfter(pt))
-                // }
-                return true
+        pickup_time: Yup.string().required("time required").transform((value,org_value)=>parseFloat(value.replace(":","."))),
+        dropoff_time: Yup.string().transform((value,org_value)=>parseFloat(value.replace(":",".")))
+        .required("time required")
+            // .test("dtime", "time should not before pickuptime", (value) => {
+            //     let pd = moment(Yup.ref('pickup_date'))
+            //     let dd = moment(Yup.ref('dropoff_date'))
+            //     let pt = Yup.ref('pickup_time')
+
+            //     // console.log('pd',pd);
+            //     // console.log('dd',dd.toString());
+            //     console.log('pt',pt.path);
+               
+            //     let ddt = moment(`${dd.toDate().toDateString()} ${value??''}`)
+            //     let pdt = moment(`${pd.toDate().toDateString()} ${pt}`)
+
+            //     // console.log(value);
+            //     // console.log('pd',pd.isSame(dd));
+            //     // console.log('dropoff date',dd.toDate().toDateString());
+            //     // console.log('dt',dt.toString());
+
+            //     if (value &&  pd.isSame(dd) && !ddt.isAfter(pdt)) {
+            //         console.log('inside value',value);
+            //         console.log('inside pdt',pdt);
+            //         console.log('inside ddt',ddt);
+            //         console.log(pd.isSame(dd));
+            //         return false
+            //     }
+            //     return true
+            // })
+
+            
+            .when(["pickup_date","dropoff_date","pickup_time"],(pickup_date,dropoff_date,pickup_time,schema)=>{
+                let pd = moment(pickup_date)
+                    let dd = moment(dropoff_date)
+                    let pt = pickup_time
+                    let dt = Yup.ref('dropoff_time')
+                    console.log('schema values',dt);
+                    if(dd.isSame(pd)){
+                        console.log('same');
+                        console.log('pt',pt);
+                    //    return  schema.validate()
+
+                    return schema.min(pt,"minimum")
+                    }
+
+                   
+                return schema
             })
-        // .when(["pickup_date","dropoff_date","pickup_time"],(pickup_date,dropoff_date,pickup_time,schema)=>{
-        //     let pd=moment(pickup_date)
-        //     let dd=moment(dropoff_date)
-        //     let pt=moment(pickup_time)
-        //     if(pd.isSame(dd)){
-        //         return  schema.min(pt,'min after pickup time')
-        //     }
 
-
-        //     return schema
-        // }),
+        
     })
 
     const handleChange = (field, value, formikProps) => {
@@ -72,7 +96,7 @@ const DeliveryFormValidationWithFormik = () => {
         // console.log(formikProps);
         // console.log(resetForm);
         // console.log('errors',errors);
-        console.log('touched', touched);
+        // console.log('touched', touched);
 
 
 
