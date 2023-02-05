@@ -1,22 +1,41 @@
-import React from 'react'
-import { TableRow, TableCell, Input, Button } from '@mui/material';
+import React from "react";
+import { TableRow, TableCell, Input, Button } from "@mui/material";
 
-const TableRowComponent = ({rowRemove,rowId}) => {
-    const remove=()=>{
-        rowRemove(rowId)
-    }
-    return (
-        <>
-            <TableRow>
-                <TableCell>{rowId}</TableCell>
-                <TableCell><Input /></TableCell>
-                <TableCell><Input /></TableCell>
-                <TableCell><Input /></TableCell>
-                <TableCell><Input /></TableCell>
-                <TableCell><Button onClick={(e)=>remove()} variant='text' >X</Button></TableCell>
-            </TableRow>
-        </>
-    )
-}
+const TableRowComponent = (props) => {
+  const { rowRemove, rowId, row, hadleChangeInput } = props;
 
-export default TableRowComponent
+  return (
+    <>
+      <TableRow>
+        <TableCell>{rowId + 1}</TableCell>
+        <TableCell>
+          <Input name="name" value={row?.name} onChange={hadleChangeInput} />
+        </TableCell>
+        <TableCell>
+          <Input name="roll" value={row?.roll} onChange={hadleChangeInput} />
+        </TableCell>
+        <TableCell>
+          <Input
+            name="class_"
+            value={row?.class_}
+            onChange={hadleChangeInput}
+          />
+        </TableCell>
+        <TableCell>
+          <Input
+            name="section"
+            value={row?.section}
+            onChange={hadleChangeInput}
+          />
+        </TableCell>
+        <TableCell>
+          <Button onClick={(e) => rowRemove(rowId)} variant="text">
+            X
+          </Button>
+        </TableCell>
+      </TableRow>
+    </>
+  );
+};
+
+export default TableRowComponent;
